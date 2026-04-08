@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Join — Get Early Access</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ── */
+    :root {
+      --ink:    #0d0d0d;
+      --paper:  #f5f0e8;
+      --cream:  #ede8dc;
+      --rust:   #c84b2f;
+      --rust2:  #e8623d;
+      --gold:   #d4a843;
+      --muted:  #7a7060;
+      --success:#2d7a4f;
+      --radius: 16px;
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      min-height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Page wrapper ── */
+    .page {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 24px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,75,47,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--cream);
+      border: 1.5px solid rgba(212,168,67,0.4);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.2rem, 9vw, 3rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--rust);
+    }
+
+    .hero p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+      max-width: 320px;
+      margin-bottom: 36px;
+    }
+
+    /* ── CTA section ── */
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Truecaller button */
+    .btn-tc {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px 24px;
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(200,75,47,0.3);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-tc:active { transform: scale(0.97); }
+    .btn-tc::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .tc-logo {
+      width: 22px; height: 22px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tc-logo svg { width: 14px; height: 14px; }
+
+    /* OTP fallback link */
+    .link-otp {
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 8px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      background: none;
+      border: none;
+      font-family: var(--font-body);
+    }
+
+    /* Social proof */
+    .proof {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .avatars {
+      display: flex;
+    }
+    .avatars span {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--paper);
+      margin-left: -8px;
+      background: var(--cream);
+      font-size: 11px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .avatars span:first-child { margin-left: 0; }
+    .proof p { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .proof strong { color: var(--ink); }
+
+    /* ── Decorative strip ── */
+    .strip {
+      height: 4px;
+      background: linear-gradient(90deg, var(--rust), var(--gold), var(--rust2));
+    }
+
+    /* ─────────────────────────────────────────
+       MODAL OVERLAY
+    ───────────────────────────────────────── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(13,13,13,0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .sheet {
+      width: 100%;
+      background: var(--paper);
+      border-radius: 24px 24px 0 0;
+      padding: 12px 24px 40px;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .overlay.show .sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 36px; height: 4px;
+      background: var(--cream);
+      border-radius: 100px;
+      margin: 0 auto 24px;
+    }
+
+    /* State: loading */
+    .state { display: none; flex-direction: column; align-items: center; gap: 16px; padding: 24px 0; }
+    .state.active { display: flex; }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--cream);
+      border-top-color: var(--rust);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .state p { font-size: 14px; color: var(--muted); text-align: center; }
+    .state h3 { font-family: var(--font-head); font-size: 18px; }
+
+    /* State: form (prefilled) */
+    .form-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .avatar-circle {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--rust), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff;
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+
+    .form-header-text h3 {
+      font-family: var(--font-head);
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .form-header-text p {
+      font-size: 12px;
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .form-header-text p::before {
+      content: '✓';
+      font-weight: 700;
+    }
+
+    /* Fields */
+    .field { margin-bottom: 16px; }
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--cream);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field textarea:focus {
+      border-color: var(--rust);
+    }
+    .field input.prefilled {
+      background: rgba(45,122,79,0.07);
+      border-color: rgba(45,122,79,0.25);
+      color: var(--success);
+    }
+    .field .prefill-tag {
+      display: inline-block;
+      font-size: 10px;
+      color: var(--success);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 18px;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      border-radius: var(--radius);
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s;
+      margin-top: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-submit:active { transform: scale(0.98); }
+
+    /* State: success */
+    .success-icon {
+      width: 64px; height: 64px;
+      background: rgba(45,122,79,0.1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+    }
+
+    /* OTP form */
+    .otp-title {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .otp-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+    /* Back button */
+    .btn-back {
+      background: none; border: none;
+      font-size: 13px; color: var(--muted);
+      cursor: pointer; padding: 0;
+      font-family: var(--font-body);
+      display: flex; align-items: center; gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="strip"></div>
+
+<div class="page">
+  <div class="hero">
+
+    <div class="badge">Limited early access</div>
+
+    <h1>Get in<br/>before the<br/><em>crowd does.</em></h1>
+
+    <p>Join thousands of early members getting exclusive access. Takes 5 seconds — no passwords, no hassle.</p>
+
+    <div class="cta-wrap">
+      <button class="btn-tc" id="btnTruecaller">
+        <span class="tc-logo">
+          <!-- Truecaller "T" icon approximation -->
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="20" height="20" rx="4" fill="#008ACB"/>
+            <text x="4" y="15" font-size="13" font-weight="bold" fill="white" font-family="Arial">T</text>
+          </svg>
+        </span>
+        Continue with Truecaller
+      </button>
+      <button class="link-otp" id="btnOtpFallback">Use phone number + OTP instead</button>
+    </div>
+
+    <div class="proof">
+      <div class="avatars">
+        <span>🙂</span><span>😊</span><span>😄</span>
+      </div>
+      <p><strong>2,400+ people</strong> joined<br/>this week alone</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── BOTTOM SHEET MODAL ── -->
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle"></div>
+
+    <!-- STATE 1: Waiting for Truecaller -->
+    <div class="state" id="stateLoading">
+      <div class="spinner"></div>
+      <h3>Opening Truecaller…</h3>
+      <p>Approve access in the Truecaller app.<br/>This takes just a second.</p>
+      <button class="link-otp" id="btnCancelTC">Cancel — use OTP instead</button>
+    </div>
+
+    <!-- STATE 2: Form (prefilled from Truecaller or OTP) -->
+    <div class="state" id="stateForm">
+
+      <!-- Shown only when Truecaller prefilled -->
+      <div class="form-header hidden" id="prefillHeader">
+        <div class="avatar-circle" id="avatarCircle">?</div>
+        <div class="form-header-text">
+          <h3 id="headerName">—</h3>
+          <p>Verified via Truecaller</p>
+        </div>
+      </div>
+
+      <!-- OTP header shown in fallback -->
+      <div id="otpHeader" class="hidden" style="width:100%">
+        <button class="btn-back" id="btnBack">← Back</button>
+        <p class="otp-title">Enter your number</p>
+        <p class="otp-sub">We'll send a one-time code to verify you.</p>
+      </div>
+
+      <form id="leadForm" style="width:100%">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" id="fieldName" placeholder="Your name" required />
+          <span class="prefill-tag hidden" id="tagName">✓ Filled from Truecaller</span>
+        </div>
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" id="fieldPhone" placeholder="+91 98765 43210" required />
+          <span class="prefill-tag hidden" id="tagPhone">✓ Filled from Truecaller</span>
+        </div>
+        <div class="field">
+          <label>Email <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+          <input type="email" id="fieldEmail" placeholder="you@example.com" />
+        </div>
+        <button type="submit" class="btn-submit" id="btnSubmit">Claim My Spot →</button>
+      </form>
+    </div>
+
+    <!-- STATE 3: Success -->
+    <div class="state" id="stateSuccess">
+      <div class="success-icon">🎉</div>
+      <h3 style="font-family:var(--font-head);font-size:22px">You're in!</h3>
+      <p>We'll be in touch soon.<br/>Watch your phone for updates.</p>
+      <div id="successDetails" style="background:var(--cream);border-radius:12px;padding:16px;width:100%;text-align:left;margin-top:8px">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:4px">Registered as</p>
+        <p style="font-size:15px;font-weight:500" id="successName">—</p>
+        <p style="font-size:14px;color:var(--muted)" id="successPhone">—</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  CONFIG — fetched from backend
+// ═══════════════════════════════════════════════
+let PARTNER_KEY = '';
+let PARTNER_NAME = '';
+let pollInterval = null;
+let currentRequestId = null;
+let mode = 'truecaller'; // or 'otp'
+
+async function loadConfig() {
+  try {
+    const r = await fetch('/truecaller/config');
+    const d = await r.json();
+    PARTNER_KEY = d.partnerKey;
+    PARTNER_NAME = d.partnerName;
+  } catch (e) {
+    console.warn('Config fetch failed', e);
+  }
+}
+loadConfig();
+
+// ═══════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════
+function generateNonce(len = 16) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({ length: len }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+}
+
+function showOverlay() {
+  document.getElementById('overlay').classList.add('show');
+}
+function hideOverlay() {
+  document.getElementById('overlay').classList.remove('show');
+  stopPolling();
+}
+
+function showState(id) {
+  ['stateLoading', 'stateForm', 'stateSuccess'].forEach(s => {
+    document.getElementById(s).classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+function stopPolling() {
+  if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+}
+
+// ═══════════════════════════════════════════════
+//  TRUECALLER FLOW
+// ═══════════════════════════════════════════════
+document.getElementById('btnTruecaller').addEventListener('click', () => {
+  mode = 'truecaller';
+  startTruecallerFlow();
+});
+
+function startTruecallerFlow() {
+  currentRequestId = generateNonce(16);
+  showOverlay();
+  showState('stateLoading');
+
+  // Hide OTP-only header
+  document.getElementById('otpHeader').classList.add('hidden');
+  document.getElementById('prefillHeader').classList.add('hidden');
+
+  const deeplink =
+    `truecallersdk://truesdk/web_verify` +
+    `?requestNonce=${currentRequestId}` +
+    `&partnerKey=${PARTNER_KEY}` +
+    `&partnerName=${encodeURIComponent(PARTNER_NAME)}` +
+    `&lang=en` +
+    `&title=signUp`;
+
+  // Open deeplink — iOS Safari requires direct user gesture (this is inside click handler ✓)
+  const wnd = window.open(deeplink, '_blank');
+
+  // Detect if Truecaller is not installed (timeout trick)
+  setTimeout(() => {
+    try {
+      if (!wnd || wnd.closed || wnd.location.href === 'about:blank') {
+        wnd && wnd.close();
+        // Truecaller not present — silently fall to OTP
+        stopPolling();
+        showOtpFallback();
+        return;
+      }
+    } catch (e) {
+      // On iOS Safari, cross-origin access throws → means deeplink DID open (good)
+    }
+  }, 300);
+
+  // Start polling backend
+  startPolling();
+}
+
+function startPolling() {
+  stopPolling();
+  let attempts = 0;
+  const MAX = 60; // 2 min max
+
+  pollInterval = setInterval(async () => {
+    attempts++;
+    if (attempts > MAX) {
+      stopPolling();
+      showOtpFallback();
+      return;
+    }
+
+    try {
+      const res = await fetch(`/truecaller/poll?requestId=${currentRequestId}`);
+      const data = await res.json();
+
+      if (data.status === 'pending') return; // keep waiting
+
+      stopPolling();
+
+      if (data.status === 'success') {
+        prefillForm(data.profile);
+      } else {
+        // error or user_rejected
+        showOtpFallback();
+      }
+    } catch (e) {
+      // network blip, keep polling
+    }
+  }, 2000);
+}
+
+function prefillForm(profile) {
+  const firstName = profile?.name?.first || '';
+  const lastName  = profile?.name?.last  || '';
+  const fullName  = `${firstName} ${lastName}`.trim();
+  const phone     = profile?.phoneNumbers?.[0] || '';
+  const email     = profile?.onlineIdentities?.email || '';
+  const avatar    = profile?.avatarUrl || '';
+
+  // Fill fields
+  if (fullName) {
+    const el = document.getElementById('fieldName');
+    el.value = fullName;
+    el.classList.add('prefilled');
+    document.getElementById('tagName').classList.remove('hidden');
+  }
+  if (phone) {
+    const el = document.getElementById('fieldPhone');
+    // Format: +91XXXXXXXXXX → +91 XXXXX XXXXX
+    el.value = phone.length === 12 ? `+${phone.slice(0,2)} ${phone.slice(2,7)} ${phone.slice(7)}` : `+${phone}`;
+    el.classList.add('prefilled');
+    document.getElementById('tagPhone').classList.remove('hidden');
+  }
+  if (email) {
+    document.getElementById('fieldEmail').value = email;
+  }
+
+  // Header
+  const headerEl = document.getElementById('prefillHeader');
+  headerEl.classList.remove('hidden');
+  document.getElementById('headerName').textContent = firstName || fullName || 'Hey there';
+
+  const avatarCircle = document.getElementById('avatarCircle');
+  if (avatar) {
+    avatarCircle.innerHTML = `<img src="${avatar}" alt="avatar" />`;
+  } else {
+    avatarCircle.textContent = (firstName[0] || 'U').toUpperCase();
+  }
+
+  document.getElementById('otpHeader').classList.add('hidden');
+  showState('stateForm');
+}
+
+// ═══════════════════════════════════════════════
+//  OTP FALLBACK
+// ═══════════════════════════════════════════════
+function showOtpFallback() {
+  mode = 'otp';
+  document.getElementById('prefillHeader').classList.add('hidden');
+  document.getElementById('otpHeader').classList.remove('hidden');
+
+  // Clear any Truecaller-prefilled styling
+  ['fieldName','fieldPhone'].forEach(id => {
+    document.getElementById(id).classList.remove('prefilled');
+  });
+  ['tagName','tagPhone'].forEach(id => {
+    document.getElementById(id).classList.add('hidden');
+  });
+
+  showState('stateForm');
+}
+
+document.getElementById('btnOtpFallback').addEventListener('click', () => {
+  showOverlay();
+  showOtpFallback();
+});
+
+document.getElementById('btnCancelTC').addEventListener('click', () => {
+  stopPolling();
+  showOtpFallback();
+});
+
+document.getElementById('btnBack').addEventListener('click', hideOverlay);
+
+// ═══════════════════════════════════════════════
+//  FORM SUBMIT
+// ═══════════════════════════════════════════════
+document.getElementById('leadForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const name  = document.getElementById('fieldName').value.trim();
+  const phone = document.getElementById('fieldPhone').value.trim();
+  const email = document.getElementById('fieldEmail').value.trim();
+
+  const btn = document.getElementById('btnSubmit');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  // ── In a real app, POST this to your CRM / DB ──
+  console.log('Lead captured:', { name, phone, email, mode });
+
+  // Simulate save
+  await new Promise(r => setTimeout(r, 800));
+
+  // Show success
+  document.getElementById('successName').textContent = name;
+  document.getElementById('successPhone').textContent = phone;
+  showState('stateSuccess');
+
+  btn.textContent = 'Claim My Spot →';
+  btn.disabled = false;
+});
+
+// Close overlay on backdrop tap
+document.getElementById('overlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('overlay')) hideOverlay();
+});
+</script>
+
+</body>
+</html>
