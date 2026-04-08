@@ -543,7 +543,6 @@ function startTruecallerFlow() {
   showOverlay();
   showState('stateLoading');
 
-  // Hide OTP-only header
   document.getElementById('otpHeader').classList.add('hidden');
   document.getElementById('prefillHeader').classList.add('hidden');
 
@@ -555,26 +554,36 @@ function startTruecallerFlow() {
     `&lang=en` +
     `&title=signUp`;
 
-  // Open deeplink — iOS Safari requires direct user gesture (this is inside click handler ✓)
-  const wnd = window.open(deeplink, '_blank');
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
-  // Detect if Truecaller is not installed (timeout trick)
-  setTimeout(() => {
-    try {
-      if (!wnd || wnd.closed || wnd.location.href === 'about:blank') {
-        wnd && wnd.close();
-        // Truecaller not present — silently fall to OTP
-        stopPolling();
+  if (isIOS) {
+    // iOS: must use location.href inside a user gesture
+    const prior = Date.now();
+    window.location.href = deeplink;
+    setTimeout(() => {
+      // If we're still here after 500ms, Truecaller didn't open
+      if (Date.now() - prior < 1500) {
         showOtpFallback();
         return;
       }
-    } catch (e) {
-      // On iOS Safari, cross-origin access throws → means deeplink DID open (good)
-    }
-  }, 300);
-
-  // Start polling backend
-  startPolling();
+      startPolling();
+    }, 500);
+  } else {
+    // Android: window.open works fine
+    const wnd = window.open(deeplink, '_blank');
+    setTimeout(() => {
+      try {
+        if (!wnd || wnd.closed || wnd.location.href === 'about:blank') {
+          wnd && wnd.close();
+          showOtpFallback();
+          return;
+        }
+      } catch (e) {
+        // cross-origin = deeplink opened fine
+      }
+    }, 300);
+    startPolling();
+  }
 }
 
 function startPolling() {
